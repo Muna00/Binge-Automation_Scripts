@@ -84,6 +84,62 @@ class Click_Pages(Main):
         expect(subscribe).to_be_visible()
 
 
+class Player_Keys(Click_Pages):
+        def __init__(self, page: Page):
+            # Ensure the parent class is initialized correctly
+            super().__init__(page)
+            # Initialize play and pause buttons
+            self.play_button = page.locator("svg[data-name='Play']")
+            self.pause_button = page.locator('svg[data-name="Pause"]')
+            self.backward_button=page.locator("svg[data-name='Back10']")
+            self.forward_button = page.locator("svg[data-name='Forward10']")
+            self.volumeON= page.locator("svg[data-name='VolumeHigh']")
+            self.volumeOFF = page.locator("svg[data-name='VolumeOff']")
+            self.fullScreen = page.locator("svg[data-name='FullscreenEnter']")
+            self.smallScreen = page.locator("svg[data-name='FullscreenExit']")
+            self.back_button=page.locator("svg[data-testid='KeyboardBackspaceIcon']")
+            self.duration_point = page.locator("span[class='BingeSlider-valueLabelOpen BingeSlider-valueLabel css-16i7qf6']")
+
+
+
+
+
+        def click_Play(self):
+            # Click the Play button
+            self.play_button.click()
+
+        def click_Pause(self):
+            # Click the Pause button
+            self.pause_button.click()
+
+        def click_Backward(self):
+            self.backward_button.click()
+
+        def click_Forward(self):
+            self.forward_button.click()
+
+        def click_VolumeON(self):
+            self.volumeON.click()
+
+        def click_VolumeOff(self):
+            self.volumeOFF.click()
+
+        def click_FullScreen(self):
+            self.fullScreen.click()
+
+        def click_SmallScreen(self):
+            self.smallScreen.click()
+
+        def click_BackButton(self):
+            self.back_button.click()
+
+        def click_Duration(self):
+            self.duration_point.click()
+
+
+
+
+
 
 
 

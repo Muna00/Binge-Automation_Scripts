@@ -162,15 +162,26 @@ def test_banner_visible(page:Page):
         new_page.click_Series,
     ]
 
+
+
     # Locator to expect on each page
-    expected_locator = "div[class='slick-slider slick-initialized']"
+    banner_locator = "div:nth-child(2) > div > div > img"
+
 
     # Loop through each page method
     for page_method in pages_to_click:
         page_method()  # Call the page method
-        expect(page.locator(expected_locator)).to_be_visible()
 
-#if slider button available then it is clickable or not
+        # Expect the banner to be visible
+        expect(page.locator(banner_locator)).to_be_visible()
+
+        # Expect the play button to be visible
+        play_button_locator = page.get_by_role("button", name="Play")
+        expect(play_button_locator).to_be_visible()
+
+        # Expect the more button to be visible
+        more_button_locator =page.get_by_role("button", name="More Info")
+        expect(more_button_locator).to_be_visible()
 
 
 def test_free_content_play(page: Page):

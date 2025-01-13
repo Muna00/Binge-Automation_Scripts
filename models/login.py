@@ -49,9 +49,9 @@ class Login:
     def login_navigate(self):
 
         self.navigate()
-        self.page.wait_for_timeout(10000)
+        self.page.wait_for_timeout(1000)
         self.close_popups()
-        self.page.wait_for_timeout(10000)
+        self.page.wait_for_timeout(1000)
 
     def otp_login(self, phone_number: str, otp: str):
 
