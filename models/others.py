@@ -105,12 +105,7 @@ class Player_Keys(Click_Pages):
 
 
 
-        # <
-        # span
-        #
-        # class ="BingeSlider-valueLabel css-16i7qf6" aria-hidden="true" > < span class ="BingeSlider-valueLabelCircle" > < span class ="BingeSlider-valueLabelLabel" > 00:24 <
-        #
-        # / span > < / span > < / span >
+        
 
         def set_prerequisites(self):
             # Perform login and navigation
@@ -180,7 +175,3 @@ class Player_Keys(Click_Pages):
 
 
 
-#<span class="BingeSlider-valueLabelOpen BingeSlider-valueLabel css-16i7qf6" aria-hidden="true"><span class="BingeSlider-valueLabelCircle"><span class="BingeSlider-valueLabelLabel">00:01</span></span></span>
-#timestamp locator <span class="BingeTypography-root BingeTypography-caption css-1uy61nr">02:26</span>
-
-#<span class="BingeSlider-valueLabel css-16i7qf6" aria-hidden="true"><span class="BingeSlider-valueLabelCircle"><span class="BingeSlider-valueLabelLabel">00:42</span></span></span>
