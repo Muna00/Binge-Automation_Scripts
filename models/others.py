@@ -98,11 +98,34 @@ class Player_Keys(Click_Pages):
             self.fullScreen = page.locator("svg[data-name='FullscreenEnter']")
             self.smallScreen = page.locator("svg[data-name='FullscreenExit']")
             self.back_button=page.locator("svg[data-testid='KeyboardBackspaceIcon']")
-            self.duration_point = page.locator("span[class='BingeSlider-valueLabelOpen BingeSlider-valueLabel css-16i7qf6']")
+            self.duration_point = page.locator('[class="BingeSlider-root BingeSlider-colorPrimary BingeSlider-sizeMedium css-1ud7vi0"]')
+            self.timestamp=page.locator("span[class='BingeTypography-root BingeTypography-caption css-1uy61nr']")
+            self.cursorTime=page.locator("span[class='BingeSlider-valueLabelOpen BingeSlider-valueLabel css-16i7qf6']")
+            self.cursorCircle=page.locator("span.BingeSlider-valueLabel.css-16i7qf6").nth(0)
 
 
 
+        # <
+        # span
+        #
+        # class ="BingeSlider-valueLabel css-16i7qf6" aria-hidden="true" > < span class ="BingeSlider-valueLabelCircle" > < span class ="BingeSlider-valueLabelLabel" > 00:24 <
+        #
+        # / span > < / span > < / span >
 
+        def set_prerequisites(self):
+            # Perform login and navigation
+            self.login_navigate()
+            self.navigate_to_trailer_section()
+
+            # Hover over the first content and verify preview window visibility
+            self.page.locator("img[class='BingeBox-root css-1vqo5l9']").nth(0).hover(timeout=60000)
+            expect(self.page.locator("div[class='BingeCardContent-root css-esr8dj']")).to_be_visible()
+            self.page.wait_for_timeout(1000)
+
+            # Click the play button
+            self.page.locator("button[class='BingeBtnBase-root css-1lo0mph']").click()
+            self.page.wait_for_timeout(1000)
+            self.page.mouse.move(100, 100)
 
         def click_Play(self):
             # Click the Play button
@@ -137,9 +160,27 @@ class Player_Keys(Click_Pages):
             self.duration_point.click()
 
 
+        def get_timestamp(self):
+            timestamp_value = self.timestamp.text_content()
+            minutes, seconds = map(int, timestamp_value.split(":"))
+            return minutes * 60 + seconds
+
+
+        def hoverOverCircle(self):
+            self.cursorCircle.hover()
 
 
 
 
 
+        def get_cursorTimeStamp(self):
+            cursor_value = self.cursorTime.text_content()
+            minutes, seconds = map(int, cursor_value.split(":"))
+            return minutes * 60 + seconds
 
+
+
+#<span class="BingeSlider-valueLabelOpen BingeSlider-valueLabel css-16i7qf6" aria-hidden="true"><span class="BingeSlider-valueLabelCircle"><span class="BingeSlider-valueLabelLabel">00:01</span></span></span>
+#timestamp locator <span class="BingeTypography-root BingeTypography-caption css-1uy61nr">02:26</span>
+
+#<span class="BingeSlider-valueLabel css-16i7qf6" aria-hidden="true"><span class="BingeSlider-valueLabelCircle"><span class="BingeSlider-valueLabelLabel">00:42</span></span></span>
