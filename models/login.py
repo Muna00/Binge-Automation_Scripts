@@ -18,6 +18,9 @@ class Login:
         self.third_otp = page.get_by_label("Please enter OTP character 3")
         self.fourth_otp = page.get_by_label("Please enter OTP character 4")
 
+        self.fb_login_button=page.get_by_label("Login with Facebook")
+        self.gmail_login_button=page.get_by_label("Login with Google")
+
         self.verify_button = page.locator("button.BingeBtnBase-root.css-mhiio4")
         self.profile_img= page.locator("button[class='BingeBtnBase-root BingeIconBtn-root BingeIconBtn-sizeMedium css-fnsiv']")
 
@@ -26,6 +29,7 @@ class Login:
         self.email_field= page.get_by_placeholder("Enter Email to Sign-in")
         self.pass_field= page.get_by_placeholder("Enter password")
         self.submit= page.get_by_role("button", name="Submit")
+
 
 
 
@@ -53,8 +57,19 @@ class Login:
         self.close_popups()
         self.page.wait_for_timeout(1000)
 
-    def otp_login(self, phone_number: str, otp: str):
+    def login_visibility(self):
+        expect(self.page.locator("div[class='BingeBox-root css-wgad3o']")).to_be_visible()
+        expect(self.phone_number_field).to_be_visible()
+        expect(self.generate_otp_button).to_be_visible()
+        expect(self.fb_login_button).to_be_visible()
+        expect(self.gmail_login_button).to_be_visible()
+        expect(self.email_login_button).to_be_visible()
+        expect(self.page.locator("u").filter(has_text="Privacy Notice")).to_be_visible()
+        expect(self.page.locator("u").filter(has_text="Terms & Condition")).to_be_visible()
 
+
+    def otp_login(self, phone_number: str, otp: str):
+        self.login_button.click()
         self.phone_number_field.fill(phone_number)
         self.generate_otp_button.click()
         self.first_otp.click()
@@ -66,6 +81,7 @@ class Login:
 
 
     def email_login(self,email:str,password:str):
+        self.login_button.click()
         self.email_login_button.click()
         self.email_field.fill(email)
         self.pass_field.fill(password)
@@ -74,6 +90,7 @@ class Login:
 
 
     def gmail_login(self):
+        self.login_button.click()
 
         self.page.get_by_label("Login with Google").click()
 
