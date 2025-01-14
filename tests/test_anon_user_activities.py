@@ -490,11 +490,10 @@ def test_anon_FreeContentPlayFromSearch(page:Page):
             play_button =page.locator("button[class='BingeBtnBase-root css-1lo0mph']")
             expect(play_button).to_be_visible()
             play_button.click()
-            expect(page).to_have_url(re.compile(r"https://binge.buzz/playing-vod/6087"),
-                                     timeout=10000)
+            expect(page).to_have_url(re.compile(r"https://binge.buzz/playing-vod/6087"),timeout=10000)
             break
     else:
-        raise AssertionError(f"No content title matched the keyword '{search_keyword}'")
+        raise AssertionError()
 
 
 
