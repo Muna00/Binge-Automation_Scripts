@@ -11,7 +11,7 @@ class Login:
         self.login_button = page.get_by_role("button", name="Login")
 
 
-        self.phone_number_field = page.locator("input.PhoneInputInput")  # Assuming 'PhoneInputInput' is the class
+        self.phone_number_field = page.locator("input.PhoneInputInput")  
         self.generate_otp_button = page.get_by_role("button", name="Generate OTP")
         self.first_otp=page.get_by_label("Please enter OTP character 1")
         self.second_otp = page.get_by_label("Please enter OTP character 2")
