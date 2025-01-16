@@ -116,7 +116,7 @@ def test_visible_clickable(page: Page):
         }
     }
 
-    # Iterate through each social media link
+    
     for platform, details in footer_links.items():
         locator = page.locator(f"xpath={details['xpath']}")
         expect(locator).to_be_visible()
@@ -131,19 +131,15 @@ def test_visible_clickable(page: Page):
             # Verify the redirection URL
             expect(new_page).to_have_url(details['expected_url'])
             print(f"Verified URL for {platform}: {details['expected_url']}")
-
-            # Close the new tab after verification
             new_page.close()
         elif platform == "twitter":
-            # Wait briefly to capture the URL before redirection
+            
             page.wait_for_timeout(1000)
 
         else:
-            # For other platforms, wait for the full navigation to the expected URL
+            
             page.wait_for_url(details['expected_url'])
             expect(page).to_have_url(details['expected_url'])
-
-        # Navigate back to the original page
         page.go_back()
 
 
@@ -162,24 +158,19 @@ def test_banner_visible(page:Page):
         new_page.click_Series,
     ]
 
-
-
-    # Locator to expect on each page
     banner_locator = "div:nth-child(2) > div > div > img"
 
 
-    # Loop through each page method
+    
     for page_method in pages_to_click:
-        page_method()  # Call the page method
-
-        # Expect the banner to be visible
+        page_method()  
         expect(page.locator(banner_locator)).to_be_visible()
 
-        # Expect the play button to be visible
+
         play_button_locator = page.get_by_role("button", name="Play")
         expect(play_button_locator).to_be_visible()
 
-        # Expect the more button to be visible
+
         more_button_locator =page.get_by_role("button", name="More Info")
         expect(more_button_locator).to_be_visible()
 
