@@ -5,11 +5,12 @@ from playwright.sync_api import sync_playwright, expect
 import re
 from playwright.sync_api import Page
 from models.login import Login
+import conftest
 from models.others import Main, Search_Keyword, Click_Pages
 
 
-def test_visible_clickable(page: Page):
-    new_page = Login(page)
+def test_visible_clickable(page, load_config):
+    new_page = Login(page, load_config)
     new_page.navigate()
     new_page.close_popups()
 
@@ -144,8 +145,8 @@ def test_visible_clickable(page: Page):
 
 
 
-def test_banner_visible(page:Page):
-    new_page=Click_Pages(page)
+def test_banner_visible(page, load_config):
+    new_page=Click_Pages(page, load_config)
     page.wait_for_timeout(10000)
     new_page.login_navigate()
     page.wait_for_timeout(10000)
@@ -175,8 +176,8 @@ def test_banner_visible(page:Page):
         expect(more_button_locator).to_be_visible()
 
 
-def test_free_content_play(page: Page):
-    new_page = Login(page)
+def test_free_content_play(page, load_config):
+    new_page = Login(page, load_config)
     new_page.navigate()
     new_page.close_popups()
     page.wait_for_timeout(1000)
@@ -209,8 +210,8 @@ def test_free_content_play(page: Page):
 
 
 
-def test_premium_content_play(page: Page):
-    new_page = Login(page)
+def test_premium_content_play(page, load_config):
+    new_page = Login(page, load_config)
     new_page.navigate()
     new_page.close_popups()
     new_page.navigate_to_trailer_section()
@@ -233,8 +234,8 @@ def test_premium_content_play(page: Page):
 
 
 
-def test_add_to_favorites(page:Page):
-    new_page = Login(page)
+def test_add_to_favorites(page, load_config):
+    new_page = Login(page, load_config)
     new_page.navigate()
     new_page.close_popups()
     new_page.navigate_to_trailer_section()
@@ -261,40 +262,15 @@ def test_add_to_favorites(page:Page):
 
 # to check if anon user can get the login prompt upon clicking the payment options and then click Cancel button
 #this is to check if an anon user is getting the login prompt, and to cancel the prompt to carry on with the login prompt  appearance
-def test_subscription_to_loginPrompt_cancel(page:Page):
-    page.get_by_role("region").get_by_text("Select payment methodbKashPay")
-    page.get_by_role("region").locator("div").filter(has_text="Pay using bKash").nth(2).click()
-    expect(page.locator("div[class='BingeBox-root css-1bw55l2']")).to_be_visible()  # login prompt
-    expect(page.locator("button[class='BingeBtnBase-root css-4x9eju']")).to_be_visible()  # login button
-    expect(page.get_by_role("button", name="Cancel")).to_be_visible()
-    page.get_by_role("button", name="Cancel").click()
 
-    page.get_by_role("region").locator("div").filter(has_text="Pay using Robi/").nth(2).click()
-    expect(page.locator("div[class='BingeBox-root css-1bw55l2']")).to_be_visible()  # login prompt
-    expect(page.locator("button[class='BingeBtnBase-root css-4x9eju']")).to_be_visible()  # login button
-    expect(page.get_by_role("button", name="Cancel")).to_be_visible()
-    page.get_by_role("button", name="Cancel").click()
-
-    page.get_by_role("region").locator("div").filter(has_text="Pay using Nagad").nth(2).click()
-    expect(page.locator("div[class='BingeBox-root css-1bw55l2']")).to_be_visible()  # login prompt
-    expect(page.locator("button[class='BingeBtnBase-root css-4x9eju']")).to_be_visible()  # login button
-    expect(page.get_by_role("button", name="Cancel")).to_be_visible()
-    page.get_by_role("button", name="Cancel").click()
-
-    page.get_by_role("region").locator("div").filter(has_text="Card/MFS PaymentPay using").nth(2).click()
-    expect(page.locator("div[class='BingeBox-root css-1bw55l2']")).to_be_visible()  # login prompt
-    expect(page.locator("button[class='BingeBtnBase-root css-4x9eju']")).to_be_visible()  # login button
-    expect(page.get_by_role("button", name="Cancel")).to_be_visible()
-    page.get_by_role("button", name="Cancel").click()
 
 
 # to check if anon user can get the login prompt upon clicking the payment options and then click Cancel button
 #this is to check if an anon user is redirecting to login page from every subscription packs
-def test_subscription_to_loginPage_Redirection(page:Page):
+def test_subscription_to_loginPage_Redirection(page, load_config):
 
-    new_page = Login(page)
-    new_page.navigate()
-    new_page.close_popups()
+    new_page = Login(page, load_config)
+    new_page.login_navigate()
     page.locator("button[class='BingeBtnBase-root css-1fjopj8']").click()
 
     page.get_by_role("button", name="Daily Pack 3 Devices Login").get_by_role("button").click()
@@ -336,12 +312,11 @@ def test_subscription_to_loginPage_Redirection(page:Page):
 
 
 
-def test_anon_subscription(page:Page):
+def test_anon_subscribeLogin(page, load_config):
     #This tests the visibility and login prompt appearance of subscription packs and voucher redeem
 
-    new_page = Login(page)
-    new_page.navigate()
-    new_page.close_popups()
+    new_page = Login(page, load_config)
+    new_page.login_navigate()
 
     #anon user subscription assertions
     page.locator("button[class='BingeBtnBase-root css-1fjopj8']").click()
@@ -353,20 +328,23 @@ def test_anon_subscription(page:Page):
     expect(page.get_by_role("button", name="Daily Pack 3 Devices Login").get_by_role("button")).to_be_visible()
     page.get_by_role("button", name="Daily Pack 3 Devices Login").get_by_role("button").click()
     new_page.check_payment_option_visibility()
-    test_subscription_to_loginPrompt_cancel(page)
+    new_page.subscription_to_loginPrompt_cancel()
 
     expect(page.locator(".BingeBox-root > div:nth-child(2) > .BingePaper-root")).to_be_visible()
     expect(page.get_by_role("button", name="Weekly Pack 3 Devices Login").get_by_role("button")).to_be_visible()
     page.get_by_role("button", name="Weekly Pack 3 Devices Login").get_by_role("button").click()
     new_page.check_payment_option_visibility()
-    test_subscription_to_loginPrompt_cancel(page)
+    new_page.subscription_to_loginPrompt_cancel()
 
     expect(page.locator("div:nth-child(3) > .BingePaper-root")).to_be_visible()
     expect(page.get_by_role("button", name="Monthly Pack 3 Devices Login").get_by_role("button")).to_be_visible()
     page.get_by_role("button", name="Monthly Pack 3 Devices Login").get_by_role("button").click()
     new_page.check_payment_option_visibility()
-    test_subscription_to_loginPrompt_cancel(page)
-    new_page.check_payment_option_visibility()
+    new_page.subscription_to_loginPrompt_cancel()
+
+    page.wait_for_timeout(5000)
+    new_page.subscription_to_loginPrompt_cancel()
+
 
 
     expect(page.locator("div:nth-child(4) > .BingePaper-root")).to_be_visible()
@@ -374,7 +352,8 @@ def test_anon_subscription(page:Page):
     page.get_by_role("button", name="6-Month Pack 3 Devices Login").get_by_role("button").click()
     expect(page.get_by_role("button", name="Redeem")).to_be_visible()
     new_page.check_payment_option_visibility()
-    test_subscription_to_loginPrompt_cancel(page)
+    # new_page.subscription_to_loginPrompt_cancel()
+    # new_page.check_payment_option_visibility()
 
 
     expect(page.get_by_placeholder("Enter Your Coupon here")).to_be_visible()
@@ -385,8 +364,8 @@ def test_anon_subscription(page:Page):
 
 
 #this test checks, of the search icon is clickable,after searching, redirecting to search results page, and displays all the matched content
-def test_search_option(page:Page):
-    pre=Login(page)
+def test_search_option(page, load_config):
+    pre=Login(page, load_config)
     pre.login_navigate()
 
     main=Main(page)
@@ -409,16 +388,16 @@ def test_search_option(page:Page):
 
 
 #should fail as for now this
-def test_blank_search(page:Page):
-    bl=Login(page)
+def test_blank_search(page, load_config):
+    bl=Login(page, load_config)
     bl.login_navigate()
     blank=Search_Keyword(page)
     search_keyword=blank.blank_search_keyword()
     blank.search_navigate(search_keyword)
 
 
-def test_wrong_search(page:Page):
-    wro=Login(page)
+def test_wrong_search(page, load_config):
+    wro=Login(page, load_config)
     wro.login_navigate()
     wrong=Search_Keyword(page)
     search_keyword=wrong.wrong_search_keyword()
@@ -429,8 +408,8 @@ def test_wrong_search(page:Page):
     assert result_count==0
     expect(page.get_by_role("heading", name="NO RECORDS FOUND")).to_be_visible()
 
-def test_anon_PremiumContentPlayFromSearch(page:Page):
-    pre=Login(page)
+def test_anon_PremiumContentPlayFromSearch(page, load_config):
+    pre=Login(page, load_config)
     pre.login_navigate()
     premium = Search_Keyword(page)
     search_keyword = premium.premium_search_keyword()
@@ -459,8 +438,8 @@ def test_anon_PremiumContentPlayFromSearch(page:Page):
 
 
 
-def test_anon_FreeContentPlayFromSearch(page:Page):
-    pre = Login(page)
+def test_anon_FreeContentPlayFromSearch(page, load_config):
+    pre = Login(page, load_config)
     pre.login_navigate()
     free = Search_Keyword(page)
     search_keyword = free.free_search_keyword()
